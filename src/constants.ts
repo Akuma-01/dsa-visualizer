@@ -1,6 +1,7 @@
 // src/constants.ts - Shared constants and configurations
 
-import { ColorLegendItem } from './types';
+// src/constants.ts - Shared constants and configurations
+import type { ColorLegendItem } from './types';
 
 // Color constants for visualization
 export const COLORS = {

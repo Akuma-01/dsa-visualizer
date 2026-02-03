@@ -10,11 +10,14 @@ import {
 	Visualization,
 } from './components';
 import { BASE_COLOR_LEGEND, DEFAULT_CONFIG, PIVOT_COLOR_LEGEND } from './constants';
-import { ArrayElement, SortingStep } from './types';
+import type { ArrayElement, SortingStep } from './types';
 import { calculateDelay, generateRandomArray } from './utils';
 
 const SortingVisualizer: React.FC = () => {
-	const [array, setArray] = useState<ArrayElement[]>([]);
+	const [array, setArray] = useState<ArrayElement[]>(() =>
+		generateRandomArray(DEFAULT_CONFIG.DEFAULT_ARRAY_SIZE)
+	);
+
 	const [arraySize, setArraySize] = useState<number>(DEFAULT_CONFIG.DEFAULT_ARRAY_SIZE);
 	const [currentStep, setCurrentStep] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -27,12 +30,18 @@ const SortingVisualizer: React.FC = () => {
 
 	const currentAlgorithm = getAlgorithmByName(selectedAlgorithm) || getDefaultAlgorithm();
 
-	useEffect(() => {
-		handleReset();
-	}, [arraySize]);
-
 	const handleReset = () => {
 		const newArray = generateRandomArray(arraySize);
+		setArray(newArray);
+		setCurrentStep(0);
+		setIsPlaying(false);
+		setSortingSteps([]);
+	};
+
+	const handleArraySizeChange = (size: number) => {
+		setArraySize(size);
+
+		const newArray = generateRandomArray(size);
 		setArray(newArray);
 		setCurrentStep(0);
 		setIsPlaying(false);
@@ -53,7 +62,9 @@ const SortingVisualizer: React.FC = () => {
 					setCurrentStep(prev => prev + 1);
 				}, calculateDelay(speed));
 			} else {
-				setIsPlaying(false);
+				timeoutRef.current = setTimeout(() => {
+					setIsPlaying(false);
+				}, 0);
 			}
 		}
 
@@ -124,7 +135,7 @@ const SortingVisualizer: React.FC = () => {
 							totalSteps={sortingSteps.length}
 							isPlaying={isPlaying}
 							onAlgorithmChange={handleAlgorithmChange}
-							onArraySizeChange={setArraySize}
+							onArraySizeChange={handleArraySizeChange}
 							onSpeedChange={setSpeed}
 							onReset={handleReset}
 							onPlayPause={handlePlayPause}
