@@ -5,7 +5,18 @@ export interface ArrayElement {
 	color: string;
 }
 
-export type SortingStep = ArrayElement[];
+export type AuxState = {
+	left?: ArrayElement[];
+	right?: ArrayElement[];
+	leftActive?: number;
+	rightActive?: number;
+	writeIndex?: number;
+};
+
+export type SortingStep = {
+	main: ArrayElement[];
+	aux?: AuxState;
+};
 
 export interface Algorithm {
 	name: string;
