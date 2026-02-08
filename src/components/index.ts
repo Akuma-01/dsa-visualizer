@@ -1,3 +1,4 @@
 import AlgorithmDetails from "./AlgorithmDetails";
+import Visualization from "./Visualization";
 
-export { AlgorithmDetails };
+export { AlgorithmDetails, Visualization };
