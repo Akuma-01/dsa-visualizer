@@ -10,16 +10,16 @@ export default function Controls({
 	onNextStep, availableAlgorithms,
 }: ControlsProps) {
 	return (
-		<div className="space-y-6 bg-white p-6 rounded-x1 shadow-sm">
+		<div className="space-y-6 bg-white p-6 rounded-x1 shadow-sm border border-gray-200">
 			{/* Algo */}
 			<div>
-				<label className="block text-sm font-medium mb-2">
+				<label className="block text-sm font-medium mb-2 text-gray-900">
 					Algorithm
 				</label>
 				<select
 					value={algorithm}
 					onChange={(e) => onAlgorithmChange(e.target.value)}
-					className="w-full px-3 py-2 border rounded-lg"
+					className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900"
 				>
 					{availableAlgorithms.map(a => (
 						<option key={a.name} value={a.name}>
@@ -31,7 +31,7 @@ export default function Controls({
 
 			{/*Array size*/}
 			<div>
-				<label className="block text-sm font-medium mb-2">
+				<label className="block text-sm font-semibold text-gray-900 mb-2">
 					Array Size ({arraySize})
 				</label>
 				<input
@@ -41,7 +41,7 @@ export default function Controls({
 					value={arraySize}
 					disabled={isPlaying}
 					onChange={(e) => onArraySizeChange(Number(e.target.value))}
-					className="w-full"
+					className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
 				/>
 			</div>
 
@@ -49,25 +49,26 @@ export default function Controls({
 			<button
 				onClick={onReset}
 				disabled={isPlaying}
-				className="w-full bg-slate-700 text-white py-2 rounded-lg disabled:bg-gray-400"
+				className="w-full bg-slate-700 hover:bg-slate-800 text-white py-3 px-4 rounded-lg font-medium transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
 			>
 				Reset & Generate
 			</button>
 
-			{/* Exeution */}
+			{/* Playback Controls */}
 			<div className="space-y-3">
-				<div className="flex justify-center gap-3">
+				<div className="flex justify-cente items-center gap-2">
 					<button
 						onClick={onPrevStep}
 						disabled={currentStep === 0}
-						className="px-3 py-2 bg-gray-200 rounded"
+						className="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg flex items-center justify-center min-w-11 font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+						title="Previous Step"
 					>
 						◀
 					</button>
 
 					<button
 						onClick={onPlayPause}
-						className="px-4 py-2 bg-slate-700 text-white rounded"
+						className="px-8 py-2.5 bg-slate-700 hover:bg-slate-800 text-white rounded-lg font-semibold transition-colors shadow-sm min-w-25"
 					>
 						{isPlaying ? "Pause" : "Play"}
 					</button>
@@ -75,7 +76,8 @@ export default function Controls({
 					<button
 						onClick={onNextStep}
 						disabled={totalSteps === 0 || currentStep >= totalSteps - 1}
-						className="px-3 py-2 bg-gray-200 rounded"
+						className="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg flex items-center justify-center min-w-11 font-semibold transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+						title="Next Step"
 					>
 						▶
 					</button>
@@ -88,7 +90,7 @@ export default function Controls({
 
 			{/* speed */}
 			<div>
-				<label className="block text-sm font-medium mb-2">
+				<label className="block text-sm font-semibold text-gray-900 mb-2">
 					Speed
 				</label>
 				<input
@@ -97,7 +99,7 @@ export default function Controls({
 					max="100"
 					value={speed}
 					onChange={(e) => onSpeedChange(Number(e.target.value))}
-					className="w-full"
+					className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
 				/>
 			</div>
 

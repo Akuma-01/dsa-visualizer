@@ -77,7 +77,7 @@ const SortingVisualizer: React.FC = () => {
 
 	useEffect(() => {
 		if (sortingSteps.length > 0 && currentStep < sortingSteps.length) {
-			setArray(sortingSteps[currentStep]);
+			setArray(sortingSteps[currentStep].main);
 		}
 	}, [currentStep, sortingSteps]);
 
