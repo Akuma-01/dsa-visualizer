@@ -29,6 +29,7 @@ export interface Algorithm {
 	};
 	spaceComplexity: string;
 	code: string;
+	invariant?: string;
 	sortFunction: (arr: ArrayElement[]) => SortingStep[];
 }
 
