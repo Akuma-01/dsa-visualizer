@@ -5,6 +5,7 @@ export function makeStep(
 	getColor: (idx: number) => string,
 	aux?: AuxState,
 	line?: number,
+	operation?: string
 ): SortingStep {
 	return {
 		main: array.map((el, idx) => ({
@@ -13,5 +14,6 @@ export function makeStep(
 		})),
 		aux,
 		line,
+		operation,
 	};
 }

@@ -8,19 +8,25 @@ export default function CodeDisplay({ code, activeLine }: Props) {
 
 	return (
 		<div className="bg-slate-900 rounded-xl p-4 max-h-105 overflow-auto">
-			<pre className="text-sm font-mono text-slate-100">
-				{lines.map((line, i) => (
-					<div
-						key={i}
-						className={`px-2 py-1 rounded ${i === activeLine
-							? "bg-yellow-500/20 border-l-4 border-yellow-400"
-							: ""
-							}`}
-					>
-						{line}
-					</div>
-				))}
-			</pre>
+			<div className="bg-slate-900 text-slate-100 rounded-xl shadow-sm p-4">
+				<h3 className="text-sm font-semibold mb-3 text-slate-300">
+					Algorithm Code
+				</h3>
+
+				<pre className="text-sm font-mono text-slate-100">
+					{lines.map((line, i) => (
+						<div
+							key={i}
+							className={`px-2 py-1 rounded ${i === activeLine
+								? "bg-yellow-500/20 border-l-4 border-yellow-400"
+								: ""
+								}`}
+						>
+							{line}
+						</div>
+					))}
+				</pre>
+			</div>
 		</div>
 	);
 }

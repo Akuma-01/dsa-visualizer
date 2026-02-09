@@ -18,7 +18,8 @@ export const bubbleSort = (arr: ArrayElement[]): SortingStep[] => {
 					idx === j || idx === j + 1 ? COLORS.COMPARING :
 						idx >= n - i ? COLORS.SORTED : COLORS.UNSORTED,
 					undefined,
-					3
+					3,
+					"COMPARE"
 				)
 			);
 
@@ -32,7 +33,8 @@ export const bubbleSort = (arr: ArrayElement[]): SortingStep[] => {
 						idx === j || idx === j + 1 ? COLORS.SWAPPING :
 							idx >= n - i ? COLORS.SORTED : COLORS.UNSORTED,
 						undefined,
-						4
+						4,
+						"SWAP"
 					)
 				);
 			}
