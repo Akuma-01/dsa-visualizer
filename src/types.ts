@@ -51,21 +51,3 @@ export interface ControlsProps {
 	availableAlgorithms: Algorithm[];
 }
 
-export interface VisualizationProps {
-	array: ArrayElement[];
-}
-
-export interface AlgorithmDetailsProps {
-	algorithm: Algorithm;
-	colorLegend: ColorLegendItem[];
-}
-
-export interface CodeDisplayProps {
-	code: string;
-}
-
-export interface ColorLegendItem {
-	color: string;
-	label: string;
-	description: string;
-}

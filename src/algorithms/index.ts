@@ -3,6 +3,7 @@ import type { Algorithm } from "../types";
 import { bubbleSort } from "./bubbleSort";
 import { insertionSort } from "./insertionSort";
 import { mergeSort } from "./mergeSort";
+import { quickSort } from "./quickSort";
 
 export const algorithms: Algorithm[] = [
 	{
@@ -61,12 +62,31 @@ for i = 1 to n-1
 mergeSort(left, right):
   if left >= right
     return
-
   mid = (left + right) / 2
   mergeSort(left, mid)
   mergeSort(mid+1, right)
   merge(left, mid, right)`,
 		sortFunction: mergeSort,
+	},
+	{
+		name: "quick",
+		displayName: "Quick Sort",
+		description:
+			"Partitions around a pivot and recursively sorts left and right subarrays.",
+		timeComplexity: {
+			average: "O(n log n)",
+			worst: "O(n²)",
+		},
+		spaceComplexity: "O(n)",
+		code: `QUICK SORT
+partition(low, high):
+pivot = arr[high]
+i = low - 1
+for j = low to high-1
+if arr[j] < pivot
+swap(arr[i], arr[j])
+swap(arr[i+1], arr[high])`,
+		sortFunction: quickSort,
 	},
 ];
 
