@@ -12,10 +12,6 @@ export default function AlgorithmDetails({ algorithm }: Props) {
 			</h2>
 
 			<p className="text-sm text-gray-300 mb-4">
-				{algorithm.displayName}
-			</p>
-
-			<p className="text-sm text-gray-300 mb-4">
 				{algorithm.description}
 			</p>
 

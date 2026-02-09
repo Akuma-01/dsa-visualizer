@@ -16,6 +16,7 @@ export type AuxState = {
 export type SortingStep = {
 	main: ArrayElement[];
 	aux?: AuxState;
+	line?: number;
 };
 
 export interface Algorithm {

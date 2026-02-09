@@ -16,11 +16,12 @@ export const algorithms: Algorithm[] = [
 			worst: "O(n²)",
 		},
 		spaceComplexity: "O(1)",
-		code: `// bubble sort pseudocode
-			for i from 0 to n-1:
-				for j from 0 to n-i-1:
-					if A[j] > A[j+1]:
-						swap`,
+		code:
+			`BUBBLE SORT
+for i = 0 to n-2
+  for j = 0 to n-i-2
+	if arr[j] > arr[j+1]
+	  swap arr[j] and arr[j+1]`,
 		sortFunction: bubbleSort,
 	},
 
@@ -35,10 +36,14 @@ export const algorithms: Algorithm[] = [
 			worst: "O(n²)",
 		},
 		spaceComplexity: "O(1)",
-		code: `// insertion sort pseudocode
-		for i from 1 to n:
-			key = A[i]
-			shift larger elements right`,
+		code: `INSERTION SORT
+for i = 1 to n-1
+  key = arr[i]
+  j = i - 1
+  while j >= 0 AND arr[j] > key
+    arr[j+1] = arr[j]
+    j--
+  arr[j+1] = key`,
 		sortFunction: insertionSort,
 	},
 
@@ -52,8 +57,15 @@ export const algorithms: Algorithm[] = [
 			worst: "O(n log n)",
 		},
 		spaceComplexity: "O(n)",
-		code: `// merge sort pseudocode
-		split → recurse → merge`,
+		code: `MERGE SORT
+mergeSort(left, right):
+  if left >= right
+    return
+
+  mid = (left + right) / 2
+  mergeSort(left, mid)
+  mergeSort(mid+1, right)
+  merge(left, mid, right)`,
 		sortFunction: mergeSort,
 	},
 ];

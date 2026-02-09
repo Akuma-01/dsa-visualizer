@@ -13,11 +13,12 @@ export const bubbleSort = (arr: ArrayElement[]): SortingStep[] => {
 	for (let i = 0; i < n - 1; i++) {
 		for (let j = 0; j < n - i - 1; j++) {
 			// Highlight elements being compared
-
 			steps.push(
 				makeStep(workingArray, idx =>
 					idx === j || idx === j + 1 ? COLORS.COMPARING :
-						idx >= n - i ? COLORS.SORTED : COLORS.UNSORTED
+						idx >= n - i ? COLORS.SORTED : COLORS.UNSORTED,
+					undefined,
+					3
 				)
 			);
 
@@ -29,7 +30,9 @@ export const bubbleSort = (arr: ArrayElement[]): SortingStep[] => {
 				steps.push(
 					makeStep(workingArray, idx =>
 						idx === j || idx === j + 1 ? COLORS.SWAPPING :
-							idx >= n - i ? COLORS.SORTED : COLORS.UNSORTED
+							idx >= n - i ? COLORS.SORTED : COLORS.UNSORTED,
+						undefined,
+						4
 					)
 				);
 			}

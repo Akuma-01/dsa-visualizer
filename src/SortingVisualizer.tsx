@@ -3,13 +3,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { algorithms, getAlgorithmByName, getDefaultAlgorithm } from './algorithms';
 import {
-	AlgorithmDetails,
-	CodeDisplay,
-	Controls,
-	Header,
-	Visualization,
+	AlgorithmDetails, CodeDisplay, Controls, Header, Visualization,
 } from './components';
-import { BASE_COLOR_LEGEND, DEFAULT_CONFIG, PIVOT_COLOR_LEGEND } from './constants';
+import { DEFAULT_CONFIG } from './constants';
 import type { ArrayElement, SortingStep } from './types';
 import { calculateDelay, generateRandomArray } from './utils';
 
@@ -112,14 +108,6 @@ const SortingVisualizer: React.FC = () => {
 		}
 	};
 
-	const getColorLegend = () => {
-		const legend = [...BASE_COLOR_LEGEND];
-		if (selectedAlgorithm === 'quick') {
-			legend.push(PIVOT_COLOR_LEGEND);
-		}
-		return legend;
-	};
-
 	return (
 		<div className="min-h-screen bg-gray-50 p-8">
 			<div className="max-w-7xl mx-auto">
@@ -150,11 +138,16 @@ const SortingVisualizer: React.FC = () => {
 					</div>
 
 					<div className="lg:col-span-3 space-y-6">
-						<CodeDisplay code={currentAlgorithm.code} />
 						<AlgorithmDetails
 							algorithm={currentAlgorithm}
-							colorLegend={getColorLegend()}
 						/>
+						<CodeDisplay
+							code={currentAlgorithm.code}
+							activeLine={sortingSteps[currentStep]?.line}
+
+						/>
+
+
 					</div>
 				</div>
 			</div>

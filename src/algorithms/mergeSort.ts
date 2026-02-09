@@ -24,7 +24,8 @@ const merge = (arr: ArrayElement[], left: number, mid: number, right: number, st
 				leftActive: i,
 				rightActive: j,
 				writeIndex: k,
-			}
+			},
+			8
 		));
 
 		if (L[i].value <= R[j].value) {
@@ -35,7 +36,9 @@ const merge = (arr: ArrayElement[], left: number, mid: number, right: number, st
 
 		steps.push(makeStep(arr, idx =>
 			idx < left || idx > right ? COLORS.UNSORTED :
-				idx >= left && idx < k ? COLORS.MERGED : COLORS.SELECTED
+				idx >= left && idx < k ? COLORS.MERGED : COLORS.SELECTED,
+			undefined,
+			8
 		))
 	}
 
@@ -43,7 +46,9 @@ const merge = (arr: ArrayElement[], left: number, mid: number, right: number, st
 		arr[k++] = { ...L[i++] };
 		steps.push(makeStep(arr, idx =>
 			idx < left || idx > right ? COLORS.UNSORTED :
-				idx >= left && idx < k ? COLORS.MERGED : COLORS.SELECTED
+				idx >= left && idx < k ? COLORS.MERGED : COLORS.SELECTED,
+			undefined,
+			8
 		))
 	}
 
@@ -51,12 +56,16 @@ const merge = (arr: ArrayElement[], left: number, mid: number, right: number, st
 		arr[k++] = { ...R[j++] };
 		steps.push(makeStep(arr, idx =>
 			idx < left || idx > right ? COLORS.UNSORTED :
-				idx >= left && idx < k ? COLORS.MERGED : COLORS.SELECTED
+				idx >= left && idx < k ? COLORS.MERGED : COLORS.SELECTED,
+			undefined,
+			8
 		))
 	}
 
 	steps.push(makeStep(arr, idx =>
-		idx < left || idx > right ? COLORS.UNSORTED : COLORS.MERGED
+		idx < left || idx > right ? COLORS.UNSORTED : COLORS.MERGED,
+		undefined,
+		8
 	))
 
 };
@@ -69,11 +78,24 @@ const usingMergeSort = (arr: ArrayElement[], left: number, right: number, steps:
 	steps.push(makeStep(arr, idx =>
 		idx >= left && idx <= right
 			? COLORS.SELECTED
-			: COLORS.UNSORTED
+			: COLORS.UNSORTED,
+		undefined,
+		6
 	));
 
 
 	usingMergeSort(arr, left, mid, steps);
+
+	steps.push(
+		makeStep(arr, idx =>
+			idx >= left && idx <= right
+				? COLORS.SELECTED
+				: COLORS.UNSORTED,
+			undefined,
+			7
+		)
+	);
+
 	usingMergeSort(arr, mid + 1, right, steps);
 
 	merge(arr, left, mid, right, steps);

@@ -56,7 +56,7 @@ export default function Controls({
 
 			{/* Playback Controls */}
 			<div className="space-y-3">
-				<div className="flex justify-cente items-center gap-2">
+				<div className="flex justify-center items-center gap-2">
 					<button
 						onClick={onPrevStep}
 						disabled={currentStep === 0}

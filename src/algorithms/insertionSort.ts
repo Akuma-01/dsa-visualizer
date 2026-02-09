@@ -18,7 +18,9 @@ export const insertionSort = (arr: ArrayElement[]): SortingStep[] => {
     //highlight key
     steps.push(
       makeStep(workingArray, idx =>
-        idx === floatingIdx ? COLORS.SELECTED : COLORS.UNSORTED
+        idx === floatingIdx ? COLORS.SELECTED : COLORS.UNSORTED,
+        undefined,
+        2
       )
     );
 
@@ -29,7 +31,9 @@ export const insertionSort = (arr: ArrayElement[]): SortingStep[] => {
         makeStep(workingArray, idx =>
           idx < floatingIdx ? COLORS.SORTED :
             idx === floatingIdx ? COLORS.SELECTED :
-              idx === j ? COLORS.COMPARING : COLORS.UNSORTED
+              idx === j ? COLORS.COMPARING : COLORS.UNSORTED,
+          undefined,
+          4
         )
       );
 
@@ -41,7 +45,10 @@ export const insertionSort = (arr: ArrayElement[]): SortingStep[] => {
           idx < floatingIdx ? COLORS.SORTED :
             idx === floatingIdx ? COLORS.SELECTED :
               idx === j + 1 ? COLORS.SWAPPING :
-                COLORS.UNSORTED
+                COLORS.UNSORTED,
+
+          undefined,
+          5
         )
       );
 
@@ -52,7 +59,9 @@ export const insertionSort = (arr: ArrayElement[]): SortingStep[] => {
     workingArray[j + 1] = key;
     steps.push(
       makeStep(workingArray, idx =>
-        idx <= i ? COLORS.SORTED : COLORS.UNSORTED
+        idx <= i ? COLORS.SORTED : COLORS.UNSORTED,
+        undefined,
+        7
       )
     );
   }

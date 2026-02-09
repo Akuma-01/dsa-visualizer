@@ -3,7 +3,8 @@ import type { ArrayElement, AuxState, SortingStep } from "../types";
 export function makeStep(
 	array: ArrayElement[],
 	getColor: (idx: number) => string,
-	aux?: AuxState
+	aux?: AuxState,
+	line?: number,
 ): SortingStep {
 	return {
 		main: array.map((el, idx) => ({
@@ -11,5 +12,6 @@ export function makeStep(
 			color: getColor(idx),
 		})),
 		aux,
+		line,
 	};
 }
