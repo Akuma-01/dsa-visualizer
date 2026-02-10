@@ -1,73 +1,184 @@
-# React + TypeScript + Vite
+# 📊 DSA Sorting Visualizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive **Sorting Algorithm Visualizer** built with **React + TypeScript + TailwindCSS** that animates sorting algorithms step-by-step with code synchronization, operation labels, and color-state tracking.
 
-Currently, two official plugins are available:
+This project focuses on deep visualization of how sorting algorithms work internally — not just final output, but every compare, swap, merge, and write operation.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🌐 Live Demo
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+Try the project live here:
 
-## Expanding the ESLint configuration
+👉 https://dsa-visualizer-01.vercel.app/
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+No installation required — open and start visualizing algorithms instantly.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🚀 Features
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- 🎯 Step-by-step sorting animation
+- 🎨 Color-coded operation states (compare, swap, pivot, sorted, merged, etc.)
+- 🧠 Code line highlighting synchronized with algorithm execution
+- 🏷️ Operation labels (COMPARE / SWAP / WRITE / PIVOT / MERGE)
+- ⏯️ Play / Pause / Step Forward / Step Back controls
+- ⚡ Adjustable execution speed
+- 📏 Dynamic array size control
+- 📦 Merge sort auxiliary buffer visualization
+- 🔁 Recursion visualization (merge & quick sort)
+- 🧩 Modular step engine shared across algorithms
+- 📱 Responsive dashboard layout
+
+---
+
+## 🧮 Implemented Algorithms
+
+- Bubble Sort
+- Insertion Sort
+- Merge Sort (with auxiliary buffer tracking)
+- Quick Sort (pivot + partition visualization)
+
+Each algorithm includes:
+
+- Description
+- Time complexity
+- Space complexity
+- Pseudocode display
+- Step-level visualization frames
+
+---
+
+## 🏗️ Architecture Concepts Used
+
+This project is built around a **step timeline model**:
+
+Each algorithm produces a sequence of frames:
+
+```
+SortingStep {
+  main: ArrayElement[]
+  aux?: AuxState
+  codeLine?: number
+  operation?: string
+}
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This enables:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- visualization playback
+- code line synchronization
+- operation tagging
+- auxiliary array rendering
+- rewind/forward stepping
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 🎨 Color State Machine
+
+Bars change color based on operation type:
+
+| State | Meaning |
+|--------|---------|
+UNSORTED | untouched |
+COMPARING | values being compared |
+SWAPPING | swap in progress |
+SELECTED | active element |
+SORTED | finalized position |
+PIVOT | quicksort pivot |
+MERGED | merged region |
+WRITING | write to array |
+
+---
+
+## 🖥️ Tech Stack
+
+- React
+- TypeScript
+- TailwindCSS
+- Vite
+- Functional components + hooks
+- Immutable step snapshots
+
+---
+
+## 📂 Project Structure
+
 ```
+src/
+  algorithms/
+    bubbleSort.ts
+    insertionSort.ts
+    mergeSort.ts
+    quickSort.ts
+    stepBuilder.ts
+    index.ts
+
+  components/
+    Visualization.tsx
+    Controls.tsx
+    CodeDisplay.tsx
+    AlgorithmDetails.tsx
+    Header.tsx
+
+  types.ts
+  constants.ts
+  utils.ts
+  SortingVisualizer.tsx
+```
+
+---
+
+## ▶️ Running Locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open browser at:
+
+```
+http://localhost:5173
+```
+
+---
+
+## 🎯 Learning Goals
+
+This project demonstrates:
+
+- algorithm visualization design
+- state timeline modeling
+- UI-algorithm synchronization
+- recursion visualization
+- immutable state snapshots
+- React performance patterns
+- TypeScript typing
+- modular algorithm engines
+
+---
+
+## 📌 Resume Value
+
+This is not just a UI demo — it shows:
+
+- algorithm understanding
+- data modeling
+- visualization state design
+- React architecture
+- TypeScript typing
+- modular algorithm engines
+
+---
+
+## 🤝 Acknowledgements
+
+UI layout ideas and some refinement patterns were developed with AI-assisted tools.  
+All algorithm step modeling, visualization engine design, and integration logic were implemented and customized manually.
+
+---
+
+## 📜 License
+
+MIT License
