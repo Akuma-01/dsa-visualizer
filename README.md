@@ -10,7 +10,7 @@ This project focuses on deep visualization of how sorting algorithms work intern
 
 Try the project live here:
 
-👉 https://dsa-visualizer-01.vercel.app/
+👉 https://dsa-visualizer-swart.vercel.app/
 
 No installation required — open and start visualizing algorithms instantly.
 
