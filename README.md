@@ -159,18 +159,6 @@ This project demonstrates:
 
 ---
 
-## 📌 Resume Value
-
-This is not just a UI demo — it shows:
-
-- algorithm understanding
-- data modeling
-- visualization state design
-- React architecture
-- TypeScript typing
-- modular algorithm engines
-
----
 
 ## 🤝 Acknowledgements
 
