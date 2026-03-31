@@ -18,6 +18,9 @@ export type SortingStep = {
 	aux?: AuxState;
 	line?: number;
 	operation?: string;
+	description?: string;
+	comparisons?: number;
+	swaps?: number;
 };
 
 export interface Algorithm {
@@ -51,4 +54,3 @@ export interface ControlsProps {
 	onNextStep: () => void;
 	availableAlgorithms: Algorithm[];
 }
-
