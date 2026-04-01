@@ -12,106 +12,88 @@ const partition = (
 	workingArray: ArrayElement[],
 	low: number,
 	high: number,
-	steps: SortingStep[]
+	steps: SortingStep[],
+	counters: { comparisons: number; swaps: number }
 ): number => {
-
-	// partition window highlight
-	steps.push(makeStep(
-		workingArray,
-		idx => idx >= low && idx <= high ? COLORS.SELECTED : COLORS.UNSORTED,
-		undefined,
-		1,
-		"PARTITION_RANGE"
-	));
-
 	const pivot = workingArray[high].value;
 
-	// pivot select
-	steps.push(makeStep(
-		workingArray,
+	steps.push(makeStep(workingArray,
+		idx => idx >= low && idx <= high ? COLORS.SELECTED : COLORS.UNSORTED,
+		undefined, 1, "PARTITION_RANGE",
+		`Partitioning subarray [${low}..${high}].`,
+		counters.comparisons, counters.swaps
+	));
+
+	steps.push(makeStep(workingArray,
 		idx => idx === high ? COLORS.PIVOT : COLORS.UNSORTED,
-		undefined,
-		2,
-		"PIVOT"
+		undefined, 2, "PIVOT",
+		`Pivot selected: ${pivot} at index ${high}.`,
+		counters.comparisons, counters.swaps
 	));
 
 	let i = low - 1;
 
 	for (let j = low; j < high; j++) {
+		counters.comparisons++;
+		const curr = workingArray[j].value;
 
-		//  compare with pivot
-		steps.push(makeStep(
-			workingArray,
+		steps.push(makeStep(workingArray,
 			idx =>
 				idx === j ? COLORS.COMPARING :
-					idx === high ? COLORS.PIVOT :
-						COLORS.UNSORTED,
-			undefined,
-			5,
-			"COMPARE"
+					idx === high ? COLORS.PIVOT : COLORS.UNSORTED,
+			undefined, 5, "COMPARE",
+			`Comparing ${curr} with pivot ${pivot} — ${curr < pivot ? `${curr} < pivot, will swap to left side.` : `${curr} >= pivot, stays right.`}`,
+			counters.comparisons, counters.swaps
 		));
 
 		if (workingArray[j].value < pivot) {
 			i++;
+			counters.swaps++;
 
-			// swap inside partition
-			steps.push(makeStep(
-				workingArray,
+			steps.push(makeStep(workingArray,
 				idx =>
 					idx === i || idx === j ? COLORS.SWAPPING :
-						idx === high ? COLORS.PIVOT :
-							COLORS.UNSORTED,
-				undefined,
-				6,
-				"SWAP"
+						idx === high ? COLORS.PIVOT : COLORS.UNSORTED,
+				undefined, 6, "SWAP",
+				`Swapping ${workingArray[i].value} (i=${i}) and ${workingArray[j].value} (j=${j}).`,
+				counters.comparisons, counters.swaps
 			));
 
 			swap(workingArray, i, j);
 
-			// post swap frame
-			steps.push(makeStep(
-				workingArray,
+			steps.push(makeStep(workingArray,
 				idx => idx === high ? COLORS.PIVOT : COLORS.UNSORTED,
-				undefined,
-				6,
-				"SWAP_DONE"
+				undefined, 6, "SWAP_DONE",
+				`Swap done — elements smaller than pivot gathered on the left.`,
+				counters.comparisons, counters.swaps
 			));
-
 		} else {
-
-			// no-swap branch visual
-			steps.push(makeStep(
-				workingArray,
+			steps.push(makeStep(workingArray,
 				idx =>
 					idx === j ? COLORS.SELECTED :
-						idx === high ? COLORS.PIVOT :
-							COLORS.UNSORTED,
-				undefined,
-				5,
-				"SKIP"
+						idx === high ? COLORS.PIVOT : COLORS.UNSORTED,
+				undefined, 5, "SKIP",
+				`${curr} >= pivot ${pivot} — no swap needed.`,
+				counters.comparisons, counters.swaps
 			));
 		}
 	}
 
-	//  final pivot swap
-	steps.push(makeStep(
-		workingArray,
-		idx =>
-			idx === i + 1 || idx === high ? COLORS.SWAPPING : COLORS.UNSORTED,
-		undefined,
-		7,
-		"PIVOT_SWAP"
+	counters.swaps++;
+	steps.push(makeStep(workingArray,
+		idx => idx === i + 1 || idx === high ? COLORS.SWAPPING : COLORS.UNSORTED,
+		undefined, 7, "PIVOT_SWAP",
+		`Placing pivot ${pivot} into its final position at index ${i + 1}.`,
+		counters.comparisons, counters.swaps
 	));
 
 	swap(workingArray, i + 1, high);
 
-	// pivot placed
-	steps.push(makeStep(
-		workingArray,
+	steps.push(makeStep(workingArray,
 		idx => idx === i + 1 ? COLORS.SORTED : COLORS.UNSORTED,
-		undefined,
-		7,
-		"PIVOT_PLACED"
+		undefined, 7, "PIVOT_PLACED",
+		`Pivot ${pivot} is now at index ${i + 1} — its final sorted position.`,
+		counters.comparisons, counters.swaps
 	));
 
 	return i + 1;
@@ -121,40 +103,29 @@ const sort = (
 	workingArray: ArrayElement[],
 	low: number,
 	high: number,
-	steps: SortingStep[]
+	steps: SortingStep[],
+	counters: { comparisons: number; swaps: number }
 ): void => {
-
 	if (low < high) {
-		const pi = partition(workingArray, low, high, steps);
-
-		sort(workingArray, low, pi - 1, steps);
-		sort(workingArray, pi + 1, high, steps);
+		const pi = partition(workingArray, low, high, steps, counters);
+		sort(workingArray, low, pi - 1, steps, counters);
+		sort(workingArray, pi + 1, high, steps, counters);
 	}
 };
 
 export const quickSort = (arr: ArrayElement[]): SortingStep[] => {
 	const steps: SortingStep[] = [];
 	const workingArray = arr.map(el => ({ ...el }));
+	const counters = { comparisons: 0, swaps: 0 };
 
-	// ⭐ start frame
-	steps.push(makeStep(
-		workingArray,
-		() => COLORS.UNSORTED,
-		undefined,
-		undefined,
-		"START" // ⭐ ADDED
-	));
+	steps.push(makeStep(workingArray, () => COLORS.UNSORTED, undefined, undefined, "START",
+		"Starting Quick Sort — selecting pivots to partition the array.", 0, 0));
 
-	sort(workingArray, 0, arr.length - 1, steps);
+	sort(workingArray, 0, arr.length - 1, steps, counters);
 
-	// ⭐ final sorted frame
-	steps.push(makeStep(
-		workingArray,
-		() => COLORS.SORTED,
-		undefined,
-		undefined,
-		"DONE" // ⭐ ADDED
-	));
+	steps.push(makeStep(workingArray, () => COLORS.SORTED, undefined, undefined, "DONE",
+		`Sorted! Total: ${counters.comparisons} comparisons, ${counters.swaps} swaps.`,
+		counters.comparisons, counters.swaps));
 
 	return steps;
 };
