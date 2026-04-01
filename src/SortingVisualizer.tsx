@@ -1,9 +1,9 @@
-// src/SortingVisualizer.tsx - Main orchestrator component
-
 import React, { useEffect, useRef, useState } from 'react';
 import { algorithms, getAlgorithmByName, getDefaultAlgorithm } from './algorithms';
 import {
-	AlgorithmDetails, CodeDisplay, Controls, Header, Visualization,
+	AlgorithmDetails, CodeDisplay, Controls, Header,
+	StepInfo,
+	Visualization,
 } from './components';
 import { DEFAULT_CONFIG } from './constants';
 import type { ArrayElement, SortingStep } from './types';
@@ -134,16 +134,14 @@ const SortingVisualizer: React.FC = () => {
 					</div>
 
 					<div className="lg:col-span-6 space-y-3">
-
-
-						<div className="bg-white rounded-lg shadow-sm p-3 flex items-center justify-between">
-							<span className="text-sm text-gray-600">Current Operation</span>
-
-							<span className="inline-block px-3 py-1 rounded-md bg-indigo-600 text-white text-xs font-semibold">
-								{sortingSteps[currentStep]?.operation ?? "IDLE"}
-							</span>
-						</div>
-
+						<StepInfo
+							description={sortingSteps[currentStep]?.description}
+							operation={sortingSteps[currentStep]?.operation}
+							comparisons={sortingSteps[currentStep]?.comparisons}
+							swaps={sortingSteps[currentStep]?.swaps}
+							currentStep={currentStep}
+							totalSteps={sortingSteps.length}
+						/>
 						<Visualization array={array} />
 					</div>
 
