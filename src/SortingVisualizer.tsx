@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { algorithms, getAlgorithmByName, getDefaultAlgorithm } from './algorithms';
 import {
-	AlgorithmDetails, CodeDisplay, Controls, Header,
+	AlgorithmDetails, CodeDisplay,
+	ColorLegend,
+	Controls, Header,
 	StepInfo,
-	Visualization,
+	Visualization
 } from './components';
 import { DEFAULT_CONFIG } from './constants';
 import type { ArrayElement, SortingStep } from './types';
@@ -143,6 +145,7 @@ const SortingVisualizer: React.FC = () => {
 							totalSteps={sortingSteps.length}
 						/>
 						<Visualization array={array} />
+						<ColorLegend />
 					</div>
 
 					<div className="lg:col-span-3 space-y-6">

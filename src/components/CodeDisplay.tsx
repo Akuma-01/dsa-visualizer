@@ -1,28 +1,21 @@
-type Props = {
-	code: string;
-	activeLine?: number;
-};
+type Props = { code: string; activeLine?: number };
 
 export default function CodeDisplay({ code, activeLine }: Props) {
 	const lines = code.split("\n");
-
 	return (
-		<div className="bg-slate-900 rounded-xl p-4 max-h-105 overflow-auto">
-			<div className="bg-slate-900 text-slate-100 rounded-xl shadow-sm p-4">
-				<h3 className="text-sm font-semibold mb-3 text-slate-300">
-					Algorithm Code
-				</h3>
-
-				<pre className="text-sm font-mono text-slate-100">
+		<div className="p-4 flex flex-col gap-2 flex-1">
+			<p className="text-xs font-semibold text-slate-500 uppercase tracking-widest">Pseudocode</p>
+			<div className="overflow-auto flex-1">
+				<pre className="text-xs font-mono">
 					{lines.map((line, i) => (
 						<div
 							key={i}
-							className={`px-2 py-1 rounded ${i === activeLine
-								? "bg-yellow-500/20 border-l-4 border-yellow-400"
-								: ""
+							className={`px-2 py-0.5 rounded transition-colors ${i === activeLine
+									? "bg-yellow-400/15 border-l-2 border-yellow-400 text-yellow-200"
+									: "text-slate-400"
 								}`}
 						>
-							{line}
+							{line || " "}
 						</div>
 					))}
 				</pre>

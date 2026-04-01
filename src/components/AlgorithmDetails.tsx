@@ -1,45 +1,45 @@
 import type { Algorithm } from "../types";
 
-type Props = {
-	algorithm: Algorithm;
-};
+type Props = { algorithm: Algorithm };
 
 export default function AlgorithmDetails({ algorithm }: Props) {
 	return (
-		<div className="p-4 bg-gray-800 rounded-lg text-white">
-			<h2 className="text-xl font-semibold mb-2">
-				{algorithm.displayName}
-			</h2>
-
-			<p className="text-sm text-gray-300 mb-4">
-				{algorithm.description}
-			</p>
-
-			<div className="space-y-3 text-sm">
-				<div>
-					<strong>Time Complexity</strong>
-					<ul className="ml-4 list-disc text-gray-300">
-						{algorithm.timeComplexity.best && (
-							<li>Best: {algorithm.timeComplexity.best}</li>
-						)}
-						<li>Average: {algorithm.timeComplexity.average}</li>
-						<li>Worst: {algorithm.timeComplexity.worst}</li>
-					</ul>
-				</div>
-
-				<div>
-					<strong>Space Complexity:</strong>{" "}
-					<span className="text-gray-300">{algorithm.spaceComplexity}</span>
-				</div>
-
-				{algorithm.invariant &&
-					<div>
-						<strong>Invariant:</strong>
-						<p className="text-gray-300">{algorithm.invariant}</p>
-					</div>
-				}
-
+		<div className="p-4 flex flex-col gap-3">
+			<div>
+				<h2 className="text-sm font-bold text-white">{algorithm.displayName}</h2>
+				<p className="text-xs text-slate-400 mt-1 leading-relaxed">{algorithm.description}</p>
 			</div>
+
+			<div>
+				<p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1.5">Complexity</p>
+				<div className="grid grid-cols-2 gap-1.5">
+					{algorithm.timeComplexity.best && (
+						<div className="bg-slate-800 rounded-lg px-2.5 py-1.5">
+							<p className="text-xs text-slate-500">Best</p>
+							<p className="text-xs font-bold text-green-400 font-mono">{algorithm.timeComplexity.best}</p>
+						</div>
+					)}
+					<div className="bg-slate-800 rounded-lg px-2.5 py-1.5">
+						<p className="text-xs text-slate-500">Average</p>
+						<p className="text-xs font-bold text-yellow-400 font-mono">{algorithm.timeComplexity.average}</p>
+					</div>
+					<div className="bg-slate-800 rounded-lg px-2.5 py-1.5">
+						<p className="text-xs text-slate-500">Worst</p>
+						<p className="text-xs font-bold text-red-400 font-mono">{algorithm.timeComplexity.worst}</p>
+					</div>
+					<div className="bg-slate-800 rounded-lg px-2.5 py-1.5">
+						<p className="text-xs text-slate-500">Space</p>
+						<p className="text-xs font-bold text-blue-400 font-mono">{algorithm.spaceComplexity}</p>
+					</div>
+				</div>
+			</div>
+
+			{algorithm.invariant && (
+				<div className="bg-indigo-500/10 border border-indigo-500/20 rounded-lg px-3 py-2">
+					<p className="text-xs font-semibold text-indigo-400 mb-0.5">Invariant</p>
+					<p className="text-xs text-slate-400 leading-relaxed">{algorithm.invariant}</p>
+				</div>
+			)}
 		</div>
 	);
 }
