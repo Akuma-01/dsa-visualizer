@@ -1,14 +1,13 @@
-
 // Color constants for visualization
 export const COLORS = {
-	UNSORTED: '#1e293b',
+	UNSORTED: '#64748b',  // slate-500 — visible against dark bg, clearly "neutral"
 	COMPARING: '#ef4444',
 	SWAPPING: '#f59e0b',
 	SORTED: '#22c55e',
 	PIVOT: '#8b5cf6',
 	SELECTED: '#06b6d4',
-	WRITING: "#eab308",
-	MERGED: "#10b981",
+	WRITING: '#eab308',
+	MERGED: '#10b981',
 } as const;
 
 // Default configuration
@@ -22,4 +21,3 @@ export const DEFAULT_CONFIG = {
 	MIN_SPEED: 1,
 	MAX_SPEED: 100,
 } as const;
-

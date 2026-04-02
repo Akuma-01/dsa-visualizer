@@ -79,13 +79,17 @@ mergeSort(left, right):
 		},
 		spaceComplexity: "O(n)",
 		code: `QUICK SORT
-partition(low, high):
-pivot = arr[high]
-i = low - 1
-for j = low to high-1
-if arr[j] < pivot
-swap(arr[i], arr[j])
-swap(arr[i+1], arr[high])`,
+partition(arr, low, high):
+  pivot = arr[high]
+  i = low - 1
+
+  for j = low to high - 1:
+	if arr[j] < pivot:
+      i = i + 1
+      swap(arr[i], arr[j])
+
+  swap(arr[i + 1], arr[high])
+  return i + 1`,
 		sortFunction: quickSort,
 	},
 ];
