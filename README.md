@@ -2,100 +2,83 @@
 
 An interactive **Sorting Algorithm Visualizer** built with **React + TypeScript + TailwindCSS** that animates sorting algorithms step-by-step with code synchronization, operation labels, and color-state tracking.
 
-This project focuses on deep visualization of how sorting algorithms work internally — not just final output, but every compare, swap, merge, and write operation.
+This project focuses on deep visualization of how sorting algorithms work internally — not just the final output, but every compare, swap, merge, and write operation.
 
 ---
 
 ## 🌐 Live Demo
 
-Try the project live here:
-
 👉 https://dsa-visualizer-swart.vercel.app/
 
-No installation required — open and start visualizing algorithms instantly.
 
 ---
 
 ## 🚀 Features
 
-- 🎯 Step-by-step sorting animation
-- 🎨 Color-coded operation states (compare, swap, pivot, sorted, merged, etc.)
-- 🧠 Code line highlighting synchronized with algorithm execution
-- 🏷️ Operation labels (COMPARE / SWAP / WRITE / PIVOT / MERGE)
-- ⏯️ Play / Pause / Step Forward / Step Back controls
-- ⚡ Adjustable execution speed
-- 📏 Dynamic array size control
-- 📦 Merge sort auxiliary buffer visualization
-- 🔁 Recursion visualization (merge & quick sort)
-- 🧩 Modular step engine shared across algorithms
-- 📱 Responsive dashboard layout
+- 🎯 Step-by-step sorting animation with Play / Pause / Step Forward / Step Back
+- 🧠 Pseudocode line highlighting synchronized with each execution step
+- 💬 Human-readable step descriptions (*"Comparing 42 and 17 — out of order, will swap"*)
+- 📊 Live comparison and swap counters updated at every step
+- 🎨 Color-coded operation states (compare, swap, pivot, sorted, merged, write)
+- 🏷️ Operation labels — COMPARE / SWAP / WRITE / PIVOT / MERGE\_DONE
+- ⚡ Adjustable execution speed and dynamic array size
+- 🧩 Modular step engine shared across all algorithms
+- 📱 Responsive layout — works on desktop and mobile
 
 ---
 
-## 🧮 Implemented Algorithms
+## 🧮 Algorithms
 
-- Bubble Sort
-- Insertion Sort
-- Merge Sort (with auxiliary buffer tracking)
-- Quick Sort (pivot + partition visualization)
+| Algorithm | Best | Average | Worst | Space |
+|---|---|---|---|---|
+| Bubble Sort | O(n) | O(n²) | O(n²) | O(1) |
+| Insertion Sort | O(n) | O(n²) | O(n²) | O(1) |
+| Merge Sort | O(n log n) | O(n log n) | O(n log n) | O(n) |
+| Quick Sort | O(n log n) | O(n log n) | O(n²) | O(n) |
 
-Each algorithm includes:
-
-- Description
-- Time complexity
-- Space complexity
-- Pseudocode display
-- Step-level visualization frames
+Each algorithm includes description, time/space complexity, pseudocode display, and frame-level visualization.
 
 ---
 
-## 🏗️ Architecture Concepts Used
+## 🏗️ How It Works
 
-This project is built around a **step timeline model**:
+Built around a **step timeline model** — each algorithm pre-computes all sorting steps upfront into a `SortingStep[]` before any animation begins:
 
-Each algorithm produces a sequence of frames:
-
-```
-SortingStep {
-  main: ArrayElement[]
-  aux?: AuxState
-  codeLine?: number
-  operation?: string
+```ts
+type SortingStep = {
+  main: ArrayElement[];   // full array state with colors
+  aux?: AuxState;         // optional auxiliary buffers (merge sort)
+  line?: number;          // active pseudocode line
+  operation?: string;     // e.g. "COMPARE", "SWAP", "PIVOT_PLACED"
+  description?: string;   // human-readable explanation
+  comparisons?: number;   // running comparison count
+  swaps?: number;         // running swap/write count
 }
 ```
 
-This enables:
-
-- visualization playback
-- code line synchronization
-- operation tagging
-- auxiliary array rendering
-- rewind/forward stepping
+This enables pause, rewind, and frame scrubbing with zero re-computation.
 
 ---
 
 ## 🎨 Color State Machine
 
-Bars change color based on operation type:
-
-| State | Meaning |
-|--------|---------|
-UNSORTED | untouched |
-COMPARING | values being compared |
-SWAPPING | swap in progress |
-SELECTED | active element |
-SORTED | finalized position |
-PIVOT | quicksort pivot |
-MERGED | merged region |
-WRITING | write to array |
+| Color | State | Meaning |
+|---|---|---|
+| 🔵 Slate | UNSORTED | Untouched element |
+| 🔴 Red | COMPARING | Values being compared |
+| 🟡 Amber | SWAPPING | Swap in progress |
+| 🟢 Green | SORTED | Final position confirmed |
+| 🟣 Purple | PIVOT | Quick sort pivot element |
+| 🩵 Cyan | SELECTED | Active / key element |
+| 🟡 Yellow | WRITING | Being written to array |
+| 🟩 Emerald | MERGED | Merged region |
 
 ---
 
 ## 🖥️ Tech Stack
 
-- React
-- TypeScript
-- TailwindCSS
+- React + TypeScript
+- Tailwind CSS
 - Vite
 - Functional components + hooks
 - Immutable step snapshots
@@ -106,25 +89,24 @@ WRITING | write to array |
 
 ```
 src/
-  algorithms/
-    bubbleSort.ts
-    insertionSort.ts
-    mergeSort.ts
-    quickSort.ts
-    stepBuilder.ts
-    index.ts
-
-  components/
-    Visualization.tsx
-    Controls.tsx
-    CodeDisplay.tsx
-    AlgorithmDetails.tsx
-    Header.tsx
-
-  types.ts
-  constants.ts
-  utils.ts
-  SortingVisualizer.tsx
+├── algorithms/
+│   ├── bubbleSort.ts       # Step generation with counters + descriptions
+│   ├── insertionSort.ts
+│   ├── mergeSort.ts
+│   ├── quickSort.ts
+│   ├── stepBuilder.ts      # Shared step factory
+│   └── index.ts            # Algorithm registry
+├── components/
+│   ├── AlgorithmDetails.tsx  # Complexity info panel
+│   ├── CodeDisplay.tsx       # Pseudocode with line highlighting
+│   ├── ColorLegend.tsx       # Color state legend
+│   ├── Controls.tsx          # Sliders, playback, algorithm picker
+│   ├── StepInfo.tsx          # Step description + counters
+│   └── Visualization.tsx     # Animated bar chart
+├── types.ts
+├── constants.ts
+├── utils.ts
+└── SortingVisualizer.tsx     # Main orchestrator
 ```
 
 ---
@@ -136,37 +118,17 @@ npm install
 npm run dev
 ```
 
-Open browser at:
-
-```
-http://localhost:5173
-```
+Open at `http://localhost:5173`
 
 ---
-
-## 🎯 Learning Goals
-
-This project demonstrates:
-
-- algorithm visualization design
-- state timeline modeling
-- UI-algorithm synchronization
-- recursion visualization
-- immutable state snapshots
-- React performance patterns
-- TypeScript typing
-- modular algorithm engines
-
----
-
 
 ## 🤝 Acknowledgements
 
-UI layout ideas and some refinement patterns were developed with AI-assisted tools.  
-All algorithm step modeling, visualization engine design, and integration logic were implemented and customized manually.
+UI refinements developed with AI-assisted tools.
+All algorithm step modeling, visualization engine design, and integration logic implemented and customized manually.
 
 ---
 
 ## 📜 License
 
-MIT License
+MIT
