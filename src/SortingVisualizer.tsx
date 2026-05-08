@@ -1,6 +1,5 @@
 // src/SortingVisualizer.tsx
-
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { algorithms, getAlgorithmByName, getDefaultAlgorithm } from './algorithms';
 import {
 	AlgorithmDetails, CodeDisplay, ColorLegend,
@@ -10,7 +9,11 @@ import { DEFAULT_CONFIG } from './constants';
 import type { ArrayElement, SortingStep } from './types';
 import { calculateDelay, generateRandomArray } from './utils';
 
-const SortingVisualizer: React.FC = () => {
+interface Props {
+	onEnterRace: () => void;
+}
+
+const SortingVisualizer = ({ onEnterRace }: Props) => {
 	const [array, setArray] = useState<ArrayElement[]>(() =>
 		generateRandomArray(DEFAULT_CONFIG.DEFAULT_ARRAY_SIZE)
 	);
@@ -112,9 +115,17 @@ const SortingVisualizer: React.FC = () => {
 					<div className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
 					<h1 className="text-base md:text-lg font-bold tracking-tight">DSA Visualizer</h1>
 				</div>
-				{/* legend — desktop only */}
-				<div className="hidden md:block">
-					<ColorLegend />
+				<div className="flex items-center gap-3">
+					{/* legend — desktop only */}
+					<div className="hidden md:block">
+						<ColorLegend />
+					</div>
+					<button
+						onClick={onEnterRace}
+						className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yellow-400/10 hover:bg-yellow-400/20 border border-yellow-400/30 text-yellow-300 text-xs font-semibold transition-colors"
+					>
+						🏁 Race Mode
+					</button>
 				</div>
 			</header>
 
