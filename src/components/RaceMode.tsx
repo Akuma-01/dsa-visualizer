@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { algorithms, getAlgorithmByName } from '../algorithms';
 import { DEFAULT_CONFIG } from '../constants';
 import type { ArrayElement, SortingStep } from '../types';
-import { calculateDelay, generateRandomArray } from '../utils';
+import type { PresetType } from '../utils';
+import { calculateDelay, generateArray, generateRandomArray } from '../utils';
 
 interface LaneProps {
 	algorithmName: string;
@@ -103,9 +104,10 @@ export default function RaceMode({ onExit }: Props) {
 	const [rightAlgo, setRightAlgo] = useState(algorithms[2].name);
 	const [arraySize, setArraySize] = useState(30);
 	const [speed, setSpeed] = useState(70);
+	const [preset, setPreset] = useState<PresetType>('random');
 
 	const [sharedArray, setSharedArray] = useState<ArrayElement[]>(() =>
-		generateRandomArray(30)
+		generateArray(30, 'random')
 	);
 
 	const [leftSteps, setLeftSteps] = useState<SortingStep[]>([]);
@@ -130,7 +132,7 @@ export default function RaceMode({ onExit }: Props) {
 
 	const handleReset = () => {
 		clearTimers();
-		const newArr = generateRandomArray(arraySize);
+		const newArr = generateArray(arraySize, preset);
 		setSharedArray(newArr);
 		setLeftSteps([]);
 		setRightSteps([]);
@@ -148,7 +150,25 @@ export default function RaceMode({ onExit }: Props) {
 	const handleArraySizeChange = (size: number) => {
 		setArraySize(size);
 		clearTimers();
-		const newArr = generateRandomArray(size);
+		const newArr = generateArray(size, preset);
+		setSharedArray(newArr);
+		setLeftSteps([]);
+		setRightSteps([]);
+		setLeftStep(0);
+		setRightStep(0);
+		setIsRacing(false);
+		setRaceStarted(false);
+		setWinner(null);
+		leftStepRef.current = 0;
+		rightStepRef.current = 0;
+		leftDoneRef.current = false;
+		rightDoneRef.current = false;
+	};
+
+	const handlePresetChange = (p: PresetType) => {
+		setPreset(p);
+		clearTimers();
+		const newArr = generateArray(arraySize, p);
 		setSharedArray(newArr);
 		setLeftSteps([]);
 		setRightSteps([]);
@@ -321,6 +341,21 @@ export default function RaceMode({ onExit }: Props) {
 						onChange={e => setSpeed(Number(e.target.value))}
 						className="w-24 h-1.5 bg-slate-700 rounded-full appearance-none accent-indigo-500"
 					/>
+				</div>
+
+				{/* Preset pills */}
+				<div className="flex items-center gap-1.5">
+					<label className="text-xs text-slate-400 whitespace-nowrap">Preset</label>
+					{(['random', 'sorted', 'reversed', 'nearly-sorted'] as const).map(p => (
+						<button key={p} disabled={isRacing} onClick={() => handlePresetChange(p)}
+							className={`px-2.5 py-1 rounded-full text-xs font-semibold border transition-colors disabled:opacity-40
+								${preset === p
+									? 'bg-slate-600 border-slate-400 text-white'
+									: 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-500'
+								}`}>
+							{p === 'nearly-sorted' ? 'Nearly' : p.charAt(0).toUpperCase() + p.slice(1)}
+						</button>
+					))}
 				</div>
 
 				{/* Action buttons */}

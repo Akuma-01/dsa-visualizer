@@ -1,10 +1,17 @@
-import type { ControlsProps } from "../types";
+import type { ControlsProps, PresetType } from "../types";
+
+const PRESETS: { value: PresetType; label: string; hint: string; color: string }[] = [
+	{ value: 'random', label: 'Random', hint: 'Default — unpredictable input', color: 'text-slate-300' },
+	{ value: 'sorted', label: 'Sorted', hint: 'Best case for bubble & insertion', color: 'text-green-400' },
+	{ value: 'reversed', label: 'Reversed', hint: 'Worst case for most algorithms', color: 'text-red-400' },
+	{ value: 'nearly-sorted', label: 'Nearly sorted', hint: '~10% swapped — realistic real data', color: 'text-amber-400' },
+];
 
 export default function Controls({
 	algorithm, arraySize, speed, currentStep,
-	totalSteps, isPlaying,
+	totalSteps, isPlaying, preset,
 	onAlgorithmChange, onArraySizeChange,
-	onSpeedChange, onReset,
+	onSpeedChange, onPresetChange, onReset,
 	onPlayPause, onPrevStep, onNextStep,
 	availableAlgorithms,
 }: ControlsProps) {
@@ -25,6 +32,30 @@ export default function Controls({
 						<option key={a.name} value={a.name}>{a.displayName}</option>
 					))}
 				</select>
+			</div>
+
+			{/* Input preset */}
+			<div>
+				<label className="block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1.5">
+					Input preset
+				</label>
+				<div className="flex flex-col gap-1">
+					{PRESETS.map(p => (
+						<button
+							key={p.value}
+							disabled={isPlaying}
+							onClick={() => onPresetChange(p.value)}
+							className={`flex items-center justify-between px-3 py-2 rounded-lg border text-left text-xs transition-colors disabled:opacity-40 disabled:cursor-not-allowed
+								${preset === p.value
+									? 'bg-slate-700 border-slate-500'
+									: 'bg-slate-800/50 border-slate-700/50 hover:bg-slate-800 hover:border-slate-600'
+								}`}
+						>
+							<span className={`font-semibold ${p.color}`}>{p.label}</span>
+							<span className="text-slate-500 text-right leading-tight max-w-[110px]">{p.hint}</span>
+						</button>
+					))}
+				</div>
 			</div>
 
 			{/* Array size */}

@@ -38,6 +38,8 @@ export interface Algorithm {
 	sortFunction: (arr: ArrayElement[]) => SortingStep[];
 }
 
+export type PresetType = 'random' | 'sorted' | 'reversed' | 'nearly-sorted';
+
 export interface ControlsProps {
 	algorithm: string;
 	arraySize: number;
@@ -45,9 +47,11 @@ export interface ControlsProps {
 	currentStep: number;
 	totalSteps: number;
 	isPlaying: boolean;
+	preset: PresetType;
 	onAlgorithmChange: (algorithm: string) => void;
 	onArraySizeChange: (size: number) => void;
 	onSpeedChange: (speed: number) => void;
+	onPresetChange: (preset: PresetType) => void;
 	onReset: () => void;
 	onPlayPause: () => void;
 	onPrevStep: () => void;

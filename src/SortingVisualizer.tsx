@@ -1,19 +1,20 @@
 // src/SortingVisualizer.tsx
-import { useEffect, useRef, useState } from 'react';
+
+import React, { useEffect, useRef, useState } from 'react';
 import { algorithms, getAlgorithmByName, getDefaultAlgorithm } from './algorithms';
 import {
 	AlgorithmDetails, CodeDisplay, ColorLegend,
 	Controls, StepInfo, Visualization
 } from './components';
 import { DEFAULT_CONFIG } from './constants';
-import type { ArrayElement, SortingStep } from './types';
-import { calculateDelay, generateRandomArray } from './utils';
+import type { ArrayElement, PresetType, SortingStep } from './types';
+import { calculateDelay, generateArray, generateRandomArray } from './utils';
 
 interface Props {
 	onEnterRace: () => void;
 }
 
-const SortingVisualizer = ({ onEnterRace }: Props) => {
+const SortingVisualizer: React.FC<Props> = ({ onEnterRace }) => {
 	const [array, setArray] = useState<ArrayElement[]>(() =>
 		generateRandomArray(DEFAULT_CONFIG.DEFAULT_ARRAY_SIZE)
 	);
@@ -21,6 +22,7 @@ const SortingVisualizer = ({ onEnterRace }: Props) => {
 	const [currentStep, setCurrentStep] = useState<number>(0);
 	const [isPlaying, setIsPlaying] = useState<boolean>(false);
 	const [speed, setSpeed] = useState<number>(DEFAULT_CONFIG.DEFAULT_SPEED);
+	const [preset, setPreset] = useState<PresetType>('random');
 	const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>(getDefaultAlgorithm().name);
 	const [sortingSteps, setSortingSteps] = useState<SortingStep[]>([]);
 	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -28,13 +30,19 @@ const SortingVisualizer = ({ onEnterRace }: Props) => {
 	const currentAlgorithm = getAlgorithmByName(selectedAlgorithm) || getDefaultAlgorithm();
 
 	const handleReset = () => {
-		setArray(generateRandomArray(arraySize));
+		setArray(generateArray(arraySize, preset));
 		setCurrentStep(0); setIsPlaying(false); setSortingSteps([]);
 	};
 
 	const handleArraySizeChange = (size: number) => {
 		setArraySize(size);
-		setArray(generateRandomArray(size));
+		setArray(generateArray(size, preset));
+		setCurrentStep(0); setIsPlaying(false); setSortingSteps([]);
+	};
+
+	const handlePresetChange = (p: PresetType) => {
+		setPreset(p);
+		setArray(generateArray(arraySize, p));
 		setCurrentStep(0); setIsPlaying(false); setSortingSteps([]);
 	};
 
@@ -137,8 +145,10 @@ const SortingVisualizer = ({ onEnterRace }: Props) => {
 					<Controls
 						algorithm={selectedAlgorithm} arraySize={arraySize} speed={speed}
 						currentStep={currentStep} totalSteps={sortingSteps.length} isPlaying={isPlaying}
+						preset={preset}
 						onAlgorithmChange={handleAlgorithmChange} onArraySizeChange={handleArraySizeChange}
-						onSpeedChange={setSpeed} onReset={handleReset} onPlayPause={handlePlayPause}
+						onSpeedChange={setSpeed} onPresetChange={handlePresetChange} onReset={handleReset}
+						onPlayPause={handlePlayPause}
 						onPrevStep={handlePrevStep} onNextStep={handleNextStep}
 						availableAlgorithms={algorithms}
 					/>
@@ -202,6 +212,23 @@ const SortingVisualizer = ({ onEnterRace }: Props) => {
 							<input type="range" min="1" max="100" value={speed}
 								onChange={e => setSpeed(Number(e.target.value))}
 								className="w-full h-1.5 bg-slate-700 rounded-full appearance-none accent-indigo-500" />
+						</div>
+					</div>
+
+					{/* row 4: preset pills */}
+					<div>
+						<label className="text-xs text-slate-400 mb-1.5 block">Input preset</label>
+						<div className="flex gap-1.5 flex-wrap">
+							{(['random', 'sorted', 'reversed', 'nearly-sorted'] as const).map(p => (
+								<button key={p} disabled={isPlaying} onClick={() => handlePresetChange(p)}
+									className={`px-2.5 py-1 rounded-full text-xs font-semibold border transition-colors disabled:opacity-40
+										${preset === p
+											? 'bg-slate-600 border-slate-400 text-white'
+											: 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-500'
+										}`}>
+									{p === 'nearly-sorted' ? 'Nearly' : p.charAt(0).toUpperCase() + p.slice(1)}
+								</button>
+							))}
 						</div>
 					</div>
 				</div>
