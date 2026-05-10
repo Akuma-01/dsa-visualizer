@@ -66,17 +66,31 @@ const SortingVisualizer: React.FC<Props> = ({ onEnterRace }) => {
 	}, [isPlaying, currentStep, sortingSteps, speed]);
 
 	useEffect(() => {
-		if (sortingSteps.length > 0 && currentStep < sortingSteps.length) {
-			const currentArray = sortingSteps[currentStep].main;
-			// Find the "active" element — first comparing or swapping bar — for pitch
-			const activeEl =
-				currentArray.find(el => el.color === '#ef4444' || el.color === '#f59e0b') ??
-				currentArray[Math.floor(currentArray.length / 2)];
-			const values = currentArray.map(el => el.value);
-			playTone(activeEl.value, Math.min(...values), Math.max(...values));
-			setArray(currentArray);
+		if (
+			sortingSteps.length === 0 ||
+			currentStep >= sortingSteps.length
+		) {
+			return;
 		}
-	}, [currentStep, sortingSteps]);
+
+		const currentArray = sortingSteps[currentStep].main;
+
+		if (!currentArray.length) return;
+
+		const activeEl =
+			currentArray.find(
+				el => el.color === '#ef4444' || el.color === '#f59e0b'
+			) ?? currentArray[Math.floor(currentArray.length / 2)];
+
+		const values = currentArray.map(el => el.value);
+
+		const min = Math.min(...values);
+		const max = Math.max(...values);
+
+		playTone(activeEl.value, min, max);
+		setArray(currentArray);
+
+	}, [currentStep, sortingSteps, playTone]);
 
 	const handleAlgorithmChange = (name: string) => {
 		setSelectedAlgorithm(name); setSortingSteps([]); setCurrentStep(0); setIsPlaying(false);
@@ -148,8 +162,8 @@ const SortingVisualizer: React.FC<Props> = ({ onEnterRace }) => {
 					<button
 						onClick={() => setSoundEnabled(s => !s)}
 						className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors ${soundEnabled
-								? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20'
-								: 'bg-slate-800 border-slate-700 text-slate-500 hover:bg-slate-700'
+							? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20'
+							: 'bg-slate-800 border-slate-700 text-slate-500 hover:bg-slate-700'
 							}`}
 						title={soundEnabled ? 'Mute sound' : 'Enable sound'}
 					>

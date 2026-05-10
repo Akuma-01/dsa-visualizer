@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { algorithms, getAlgorithmByName } from '../algorithms';
 import { DEFAULT_CONFIG } from '../constants';
 import type { ArrayElement, SortingStep } from '../types';
 import type { PresetType } from '../utils';
-import { calculateDelay, generateArray, generateRandomArray } from '../utils';
+import { calculateDelay, generateArray } from '../utils';
 
 interface LaneProps {
 	algorithmName: string;
