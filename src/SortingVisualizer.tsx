@@ -7,6 +7,7 @@ import {
 	Controls, StepInfo, Visualization
 } from './components';
 import { DEFAULT_CONFIG } from './constants';
+import { useSound } from './hooks/useSound';
 import type { ArrayElement, PresetType, SortingStep } from './types';
 import { calculateDelay, generateArray, generateRandomArray } from './utils';
 
@@ -25,7 +26,9 @@ const SortingVisualizer: React.FC<Props> = ({ onEnterRace }) => {
 	const [preset, setPreset] = useState<PresetType>('random');
 	const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>(getDefaultAlgorithm().name);
 	const [sortingSteps, setSortingSteps] = useState<SortingStep[]>([]);
+	const [soundEnabled, setSoundEnabled] = useState(true);
 	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const { playTone } = useSound(soundEnabled);
 
 	const currentAlgorithm = getAlgorithmByName(selectedAlgorithm) || getDefaultAlgorithm();
 
@@ -63,8 +66,16 @@ const SortingVisualizer: React.FC<Props> = ({ onEnterRace }) => {
 	}, [isPlaying, currentStep, sortingSteps, speed]);
 
 	useEffect(() => {
-		if (sortingSteps.length > 0 && currentStep < sortingSteps.length)
-			setArray(sortingSteps[currentStep].main);
+		if (sortingSteps.length > 0 && currentStep < sortingSteps.length) {
+			const currentArray = sortingSteps[currentStep].main;
+			// Find the "active" element — first comparing or swapping bar — for pitch
+			const activeEl =
+				currentArray.find(el => el.color === '#ef4444' || el.color === '#f59e0b') ??
+				currentArray[Math.floor(currentArray.length / 2)];
+			const values = currentArray.map(el => el.value);
+			playTone(activeEl.value, Math.min(...values), Math.max(...values));
+			setArray(currentArray);
+		}
 	}, [currentStep, sortingSteps]);
 
 	const handleAlgorithmChange = (name: string) => {
@@ -134,6 +145,16 @@ const SortingVisualizer: React.FC<Props> = ({ onEnterRace }) => {
 					>
 						🏁 Race Mode
 					</button>
+					<button
+						onClick={() => setSoundEnabled(s => !s)}
+						className={`px-3 py-1.5 rounded-lg border text-xs font-semibold transition-colors ${soundEnabled
+								? 'bg-indigo-500/10 border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/20'
+								: 'bg-slate-800 border-slate-700 text-slate-500 hover:bg-slate-700'
+							}`}
+						title={soundEnabled ? 'Mute sound' : 'Enable sound'}
+					>
+						{soundEnabled ? '🔊' : '🔇'}
+					</button>
 				</div>
 			</header>
 
@@ -157,7 +178,7 @@ const SortingVisualizer: React.FC<Props> = ({ onEnterRace }) => {
 				{/* CENTER — bars + step info */}
 				<main className="flex-1 flex flex-col min-w-0 min-h-0 gap-3">
 					{StepBar}
-					<Visualization array={array} />
+					<Visualization array={array} aux={step?.aux} />
 				</main>
 
 				{/* RIGHT — algo info / code */}
@@ -240,7 +261,7 @@ const SortingVisualizer: React.FC<Props> = ({ onEnterRace }) => {
 
 				{/* Mobile bars */}
 				<div className="px-3 shrink-0">
-					<Visualization array={array} />
+					<Visualization array={array} aux={step?.aux} />
 				</div>
 
 				{/* Mobile color legend */}
